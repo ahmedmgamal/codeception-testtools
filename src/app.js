@@ -195,7 +195,7 @@ function getElementId(element)
 {
     var id = jQuery(element).attr("id");
 
-    if (id){
+    if (id != 'undefined' && id != null && id != ''){
         return '#' + id;
     }
 

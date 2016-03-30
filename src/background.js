@@ -53,28 +53,28 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 
-function seeText(info, tab) {
+function see(info, tab) {
   chrome.tabs.sendRequest(tab.id, {
-      "method": "seeText",
+      "method": "see",
       "text": info.selectionText
   });
 }
 
-function press(info, tab) {
+function click(info, tab) {
   chrome.tabs.sendRequest(tab.id, {
-      "method": "press"
+      "method": "click"
   });
 }
 
-function visit(info, tab) {
+function amOnPage(info, tab) {
   chrome.tabs.sendRequest(tab.id, {
-      "method": "visit"
+      "method": "amOnPage"
   });
 }
 
-function seePageIs(info, tab) {
+function seeInCurrentUrl(info, tab) {
   chrome.tabs.sendRequest(tab.id, {
-      "method": "seePageIs"
+      "method": "seeInCurrentUrl"
   });
 }
 
@@ -91,25 +91,25 @@ var visitMenu = chrome.contextMenus.create({
   "title": "Visit URL",
   "parentId": parent,
   "contexts":["all"],
-  "onclick": visit
+  "onclick": amOnPage
 });
 var seePageIsMenu = chrome.contextMenus.create({
   "title": "See Page is...",
   "parentId": parent,
   "contexts":["all"],
-  "onclick": seePageIs
+  "onclick": seeInCurrentUrl
 });
 var seeTextMenu = chrome.contextMenus.create({
   "title": "See text",
   "parentId": parent,
   "contexts":["selection"],
-  "onclick": seeText
+  "onclick": see
 });
 var pressMenu = chrome.contextMenus.create({
   "title": "Press",
   "parentId": parent,
   "contexts":["all"],
-  "onclick": press
+  "onclick": click
 });
 
 var fakerMenu = chrome.contextMenus.create({
