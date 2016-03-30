@@ -8,10 +8,9 @@ fakerText += indent + "" + "\n";
 fakerText += indent + "\/**" + "\n";
 fakerText += indent + " * Setup faker" + "\n";
 fakerText += indent + " *\/" + "\n";
-fakerText += indent + "public function setUp()" + "\n";
+fakerText += indent + "public function __construct()" + "\n";
 fakerText += indent + "{" + "\n";
-fakerText += indent + "    parent::setUp();" + "\n";
-fakerText += indent + "    $this->faker = new Faker\\Generator();" + "\n";
+fakerText += indent + "    $this->faker = \Faker\Factory::create();" + "\n";
 fakerText += indent + "}";
 
 var App = new Vue({
