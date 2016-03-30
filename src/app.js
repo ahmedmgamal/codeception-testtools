@@ -9,26 +9,26 @@ document.addEventListener("mousedown", function(event){
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 
     var method = request.method || false;
-    if(method === "seeText") {
+    if(method === "see") {
         App.steps.push({
           'method': 'see',
           'args': [request.text]
         });
     }
-    if(method === "press") {
+    if(method === "click") {
         var name    = getElementId(clickedEl);
         App.steps.push({
           'method': 'click',
           'args': [name]
         });
     }
-    if(method === "visit") {
+    if(method === "amOnPage") {
         App.steps.push({
             'method': 'amOnPage',
             'args': [window.location.pathname]
         });
     }
-    if(method === "seePageIs") {
+    if(method === "seeInCurrentUrl") {
         App.steps.push({
             'method': 'seeInCurrentUrl',
             'args': [window.location.pathname]
