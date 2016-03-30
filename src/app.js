@@ -16,7 +16,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         });
     }
     if(method === "press") {
-        var name    = jQuery(clickedEl).attr("name") || jQuery(clickedEl).text().trim();
+        var name    = getElementId(clickedEl);
         App.steps.push({
           'method': 'click',
           'args': [name]
@@ -53,7 +53,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     }
     if(method === "fake") {
         var fakeData  = "",
-            name      = jQuery(clickedEl).attr("name");
+            name      = getElementId(clickedEl);
 
         switch (request.type) {
           case "email":
@@ -130,7 +130,7 @@ var App = new Vue({
 
         jQuery('input[type!="checkbox"][type!="submit"]').on('change', function(){
           if (self.recording === true) {
-            var name    = jQuery(this).attr("name"),
+            var name    = getElementId(clickedEl),
                 value   = jQuery(this).val();
             self.steps.push({
                 'method': 'fillField',
@@ -141,7 +141,7 @@ var App = new Vue({
 
         jQuery('input[type="checkbox"]').on('change', function(){
           if (self.recording === true) {
-            var name    = jQuery(this).attr("name");
+            var name    = getElementId(clickedEl);;
             if (this.checked) {
                 self.steps.push({
                     'method': 'checkOption',
@@ -158,7 +158,7 @@ var App = new Vue({
 
         jQuery('input[type="submit"],button').on('click', function(e){
             if (self.recording === true) {
-              var name    = $(this).attr("name") || $(this).text().trim();
+              var name    = getElementId(clickedEl);;
               self.steps.push({
                   'method': 'click',
                   'args': [name]
@@ -168,7 +168,7 @@ var App = new Vue({
 
         jQuery('select').on('change', function(){
           if (self.recording === true) {
-            var name    = jQuery(this).attr("name"),
+            var name    = getElementId(clickedEl),
                 value   = jQuery(this).val();
             self.steps.push({
                 'method': 'selectOption',
@@ -187,6 +187,17 @@ var App = new Vue({
           'steps' : val
         });
       }
-    },
+    }
 
 });
+
+function getElementId(element)
+{
+    var id = jQuery(element).attr("id");
+
+    if (id){
+        return '#' + id;
+    }
+
+    return jQuery(element).attr("name") || jQuery(element).text().trim();
+}
