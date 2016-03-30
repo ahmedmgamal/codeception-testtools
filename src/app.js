@@ -18,19 +18,19 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if(method === "press") {
         var name    = jQuery(clickedEl).attr("name") || jQuery(clickedEl).text().trim();
         App.steps.push({
-          'method': 'press',
+          'method': 'click',
           'args': [name]
         });
     }
     if(method === "visit") {
         App.steps.push({
-            'method': 'visit',
+            'method': 'amOnPage',
             'args': [window.location.pathname]
         });
     }
     if(method === "seePageIs") {
         App.steps.push({
-            'method': 'seePageIs',
+            'method': 'seeInCurrentUrl',
             'args': [window.location.pathname]
         });
     }
@@ -39,7 +39,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         chrome.storage.local.set({'steps': App.steps, 'recording': App.recording});
         if (App.recording === true && App.steps.length === 0) {
           App.steps.push({
-              'method': 'visit',
+              'method': 'amOnPage',
               'args': [window.location.pathname]
           });
         }
@@ -78,9 +78,9 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         jQuery(clickedEl).val(fakeData);
 
         App.steps.push({
-          'method': 'type',
+          'method': 'fillField',
           'faker': true,
-          'args': ['$this->faker->'+request.type, name]
+          'args': [name, '$this->faker->'+request.type]
         });
     }
     if(method === "getSteps") {
@@ -117,12 +117,12 @@ var App = new Vue({
         if (self.recording === true) {
           if (this.steps.length === 0 || this.steps[this.steps.length-1].method !== 'press') {
             this.steps.push({
-                'method': 'visit',
+                'method': 'amOnPage',
                 'args': [window.location.pathname]
             });
           } else if (this.steps[this.steps.length-1].method === 'press') {
             this.steps.push({
-                'method': 'seePageIs',
+                'method': 'seeInCurrentUrl',
                 'args': [window.location.pathname]
             });
           }
@@ -133,8 +133,8 @@ var App = new Vue({
             var name    = jQuery(this).attr("name"),
                 value   = jQuery(this).val();
             self.steps.push({
-                'method': 'type',
-                'args': [value, name]
+                'method': 'fillField',
+                'args': [name, value]
             });
           }
         });
@@ -144,12 +144,12 @@ var App = new Vue({
             var name    = jQuery(this).attr("name");
             if (this.checked) {
                 self.steps.push({
-                    'method': 'check',
+                    'method': 'checkOption',
                     'args': [name]
                 });
             } else {
                 self.steps.push({
-                    'method': 'uncheck',
+                    'method': 'uncheckOption',
                     'args': [name]
                 });
             }
@@ -160,7 +160,7 @@ var App = new Vue({
             if (self.recording === true) {
               var name    = $(this).attr("name") || $(this).text().trim();
               self.steps.push({
-                  'method': 'press',
+                  'method': 'click',
                   'args': [name]
               });
             }
@@ -171,7 +171,7 @@ var App = new Vue({
             var name    = jQuery(this).attr("name"),
                 value   = jQuery(this).val();
             self.steps.push({
-                'method': 'select',
+                'method': 'selectOption',
                 'args': [value, name]
             });
           }
