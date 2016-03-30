@@ -6,8 +6,21 @@ document.addEventListener("mousedown", function(event){
     }
 }, true);
 
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 
+function getElementId(element)
+{
+    var id = jQuery(element).attr("id");
+    var name = jQuery(element).attr("name");
+    var text = jQuery(element).text().trim();
+
+    if(id){
+        return '#'+id;
+    }
+
+    return name || text;
+}
+
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     var method = request.method || false;
     if(method === "see") {
         App.steps.push({
@@ -130,7 +143,7 @@ var App = new Vue({
 
         jQuery('input[type!="checkbox"][type!="submit"]').on('change', function(){
           if (self.recording === true) {
-            var name    = getElementId(clickedEl),
+            var name    = getElementId(this),
                 value   = jQuery(this).val();
             self.steps.push({
                 'method': 'fillField',
@@ -141,7 +154,7 @@ var App = new Vue({
 
         jQuery('input[type="checkbox"]').on('change', function(){
           if (self.recording === true) {
-            var name    = getElementId(clickedEl);;
+            var name    = getElementId(this);
             if (this.checked) {
                 self.steps.push({
                     'method': 'checkOption',
@@ -158,7 +171,7 @@ var App = new Vue({
 
         jQuery('input[type="submit"],button').on('click', function(e){
             if (self.recording === true) {
-              var name    = getElementId(clickedEl);;
+              var name    = getElementId(this);
               self.steps.push({
                   'method': 'click',
                   'args': [name]
@@ -168,7 +181,7 @@ var App = new Vue({
 
         jQuery('select').on('change', function(){
           if (self.recording === true) {
-            var name    = getElementId(clickedEl),
+            var name    = getElementId(this),
                 value   = jQuery(this).val();
             self.steps.push({
                 'method': 'selectOption',
@@ -190,14 +203,3 @@ var App = new Vue({
     }
 
 });
-
-function getElementId(element)
-{
-    var id = jQuery(element).attr("id");
-
-    if (id != 'undefined' && id != null && id != ''){
-        return '#' + id;
-    }
-
-    return jQuery(element).attr("name") || jQuery(element).text().trim();
-}

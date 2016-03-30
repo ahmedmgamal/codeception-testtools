@@ -28,7 +28,7 @@ chrome.runtime.onConnect.addListener(function (port) {
                 "method": "recording",
                 "value": false
             });
-            delete connections[tabs[i]]
+            delete connections[tabs[i]];
             break;
           }
         }
